@@ -129,19 +129,13 @@ case "$1" in
 esac
 
 # echo dab2eti $frequency $2_$1_$timestamp.eti
-# ./dab2eti $frequency > temp.eti
+# ./dab2eti $frequency > $1_$timestamp.eti
 echo eti-cmdline-rtlsdr -C $1 $1_$timestamp.eti
 ./eti-cmdline-rtlsdr -C $1 > $1_$timestamp.eti
-#etisnoop -n 5 -i temp.eti | grep -e 'Ensemble ID: '
 
 echo ------------------------------
 echo finished recording!
 echo ------------------------------
-
-# grep -e 'Ensemble ID: ' leipzig-fig.txt
-#  etisnoop -v -n 100 -i LeipzigMinimux-1357.eti> leipzig-fig.txt
-
-# etisnoop -n 50 -i LeipzigMinimux-1357.eti | grep -e 'Ensemble ID: '
 
 # Ensemble ID
 #etisnoop -n 50 -i temp.eti | grep 'Ensemble ID: 0x.' | sort | uniq | sed -e 's/^.*Ensemble ID: //g' | sed -e 's/ (Country.*$//g'
@@ -150,12 +144,14 @@ EID=$(etisnoop -n 50 -i $1_$timestamp.eti | grep 'Ensemble ID: 0x.' | sort | uni
 echo Ensemble ID: $EID
 
 # Ensemble Label
-ELABEL=$(etisnoop -n 50 -i $1_$timestamp.eti | grep -A 2 'Ensemble ID:' | grep 'Label: ' | sort | uniq | sed -e 's/^.*Label: "//g' | sed -e 's/".*$//g')
+ELABEL=$(etisnoop -n 50 -i $1_$timestamp.eti | grep -A 2 'Ensemble ID:' | grep 'Label: ' | sort | uniq | sed -e 's/^.*Label: "//g' | sed -e 's/".*$//g'  | sed -e 's/[^a-zA-Z0-9\\.\\-]/_/g' )
 echo Ensemble Label: $ELABEL
+echo .
 
 # Rename file
 #mv $1_$timestamp.eti ${EID}_${ELABEL}_$1_$timestamp.eti
-mv $1_$timestamp.eti ${EID}_$1_$timestamp.eti
+echo Recorded file: ${EID}_${ELABEL}_$1_$timestamp.eti
+mv $1_$timestamp.eti ${EID}_${ELABEL}_$1_$timestamp.eti
 
 
 
