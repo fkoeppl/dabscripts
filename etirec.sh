@@ -133,27 +133,37 @@ esac
 echo eti-cmdline-rtlsdr -C $1 $1_$timestamp.eti
 ./eti-cmdline-rtlsdr -C $1 > $1_$timestamp.eti
 
-echo ------------------------------
-echo finished recording!
-echo ------------------------------
+# Check if something has been recorded
+if [ -s $1_$timestamp.eti ]
+then
+	echo ------------------------------
+	echo finished recording!
+	echo ------------------------------
 
-# Ensemble ID
-#etisnoop -n 50 -i temp.eti | grep 'Ensemble ID: 0x.' | sort | uniq | sed -e 's/^.*Ensemble ID: //g' | sed -e 's/ (Country.*$//g'
-EID=$(etisnoop -n 50 -i $1_$timestamp.eti | grep 'Ensemble ID: 0x.' | sort | uniq | sed -e 's/^.*Ensemble ID: 0x//g')
-#| sed -e 's/ (Country.*$//g')
-echo Ensemble ID: $EID
+	# Ensemble ID
+	#etisnoop -n 50 -i temp.eti | grep 'Ensemble ID: 0x.' | sort | uniq | sed -e 's/^.*Ensemble ID: //g' | sed -e 's/ (Country.*$//g'
+	EID=$(etisnoop -n 50 -i $1_$timestamp.eti | grep 'Ensemble ID: 0x.' | sort | uniq | head -1 | sed -e 's/^.*Ensemble ID: 0x//g' | sed -e 's/[^a-zA-Z0-9\\.\\-]/_/g')
+	#| sed -e 's/ (Country.*$//g')
+	echo Ensemble ID: $EID
 
-# Ensemble Label
-ELABEL=$(etisnoop -n 50 -i $1_$timestamp.eti | grep -A 2 'Ensemble ID:' | grep 'Label: ' | sort | uniq | sed -e 's/^.*Label: "//g' | sed -e 's/".*$//g'  | sed -e 's/[^a-zA-Z0-9\\.\\-]/_/g' )
-echo Ensemble Label: $ELABEL
-echo .
+	# Ensemble Label
+	ELABEL=$(etisnoop -n 50 -i $1_$timestamp.eti | grep -A 2 'Ensemble ID:' | grep 'Label: ' | sort | uniq | head -1  | sed -e 's/^.*Label: "//g' | sed -e 's/".*$//g'  | sed -e 's/[^a-zA-Z0-9\\.\\-]/_/g' )
+	echo Ensemble Label: $ELABEL
+	echo 
 
-# Rename file
-#mv $1_$timestamp.eti ${EID}_${ELABEL}_$1_$timestamp.eti
-echo Recorded file: ${EID}_${ELABEL}_$1_$timestamp.eti
-mv $1_$timestamp.eti ${EID}_${ELABEL}_$1_$timestamp.eti
+	# Rename file
+	#mv $1_$timestamp.eti ${EID}_${ELABEL}_$1_$timestamp.eti
+	echo Recorded file: ${EID}_${ELABEL}_$1_$timestamp.eti
+	echo mv $1_$timestamp.eti ${EID}_${ELABEL}_$1_$timestamp.eti
+	mv $1_$timestamp.eti ${EID}_${ELABEL}_$1_$timestamp.eti
 
+else
+        rm -f $1_$timestamp.eti
+	echo --------------------------------
+	echo No DAB Ensemble found on CH $1
+	echo --------------------------------
 
+fi
 
 
 
