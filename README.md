@@ -6,6 +6,7 @@ Some bash scripts for recording DAB ETI files with open source tools.
 
 - eti-stuff https://github.com/fkoeppl/eti-stuff
 - etisnoop https://github.com/Opendigitalradio/etisnoop
+- dablin https://github.com/Opendigitalradio/dablin
 
 ## Scripts
 
