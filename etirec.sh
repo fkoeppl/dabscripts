@@ -130,8 +130,17 @@ esac
 
 # echo dab2eti $frequency $2_$1_$timestamp.eti
 # ./dab2eti $frequency > $1_$timestamp.eti
-echo eti-cmdline-rtlsdr -C $1 $1_$timestamp.eti
-./eti-cmdline-rtlsdr -C $1 > $1_$timestamp.eti
+if [ -z "$2" ]
+then
+	echo Recording until user break.
+	echo
+	./eti-cmdline-rtlsdr -C $1 > $1_$timestamp.eti
+else
+	echo Recording $2 DAB frames.
+	echo
+	./eti-cmdline-rtlsdr -C $1 -N $2 > $1_$timestamp.eti
+fi
+
 
 # Check if something has been recorded
 if [ -s $1_$timestamp.eti ]
