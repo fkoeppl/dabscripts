@@ -9,7 +9,7 @@ sudo apt-get install git
 sudo apt-get install cmake
 sudo apt-get install librtlsdr-dev
  
-git clone https://github.com/JvanKatwijk/eti-stuff
+git clone https://github.com/fkoeppl/eti-stuff
 cd eti-stuff
 cd eti-cmdline
 mkdir build
