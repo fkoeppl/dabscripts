@@ -8,7 +8,31 @@ sudo apt-get install libsamplerate-dev
 sudo apt-get install git
 sudo apt-get install cmake
 sudo apt-get install librtlsdr-dev
- 
+
+# eti-stuff does not work with too new versions of cmake
+# install a compatible
+# manual found on: https://www.electronicjunkies.net/index.php/2021/04/13/install-any-version-of-cmake-on-ubuntu/
+
+# Remove previous cmake versions
+# sudo apt remove cmake
+# sudo apt purge --auto-remove cmake
+
+# sudo apt-get install build-essential
+# wget http://www.cmake.org/files/v3.15/cmake-3.15.1.tar.gz
+# tar xf cmake-3.15.1.tar.gz
+
+# cd cmake-3.15.1
+# ./configure
+# make
+# Then to install it to your system finally do 
+# sudo make install 
+
+# Do this to refresh your console 
+# hash -r
+
+# Then finally check with
+cmake --version 
+
 git clone https://github.com/fkoeppl/eti-stuff
 cd eti-stuff
 cd eti-cmdline
